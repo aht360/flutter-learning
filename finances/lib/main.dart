@@ -1,3 +1,4 @@
+import 'package:finances/widgets/chart.dart';
 import 'package:finances/widgets/new_transactions.dart';
 import 'package:finances/widgets/transaction_list.dart';
 
@@ -42,22 +43,42 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   final List<Transaction> _userTransactions = [
     // Transaction(
-    //     id: 't1', title: 'Sapato velho', amount: 124.30, date: DateTime.now()),
+    //     id: 't1',
+    //     title: 'Sapato velho',
+    //     amount: 124.30,
+    //     date: DateTime.now().subtract(
+    //       Duration(
+    //         days: 1,
+    //       ),
+    //     )),
     // Transaction(
     //     id: 't2',
     //     title: 'Weekly Groceries',
     //     amount: 16.32,
-    //     date: DateTime.now()),
+    //     date: DateTime.now().subtract(
+    //       Duration(
+    //         days: 3,
+    //       ),
+    //     )),
     // Transaction(
     //     id: 't3', title: 'Shop time', amount: 169.99, date: DateTime.now()),
   ];
 
-  void _addNewTransaction(String txTitle, double txAmount) {
+  List<Transaction> get _recentTransactions {
+    return _userTransactions
+        .where((element) => element.date
+            .isAfter(DateTime.now().subtract(const Duration(days: 7))))
+        .toList();
+  }
+
+  void _addNewTransaction(
+      String txTitle, double txAmount, DateTime chosenDate) {
     final newTx = Transaction(
-        id: DateTime.now().toString(),
-        title: txTitle,
-        amount: txAmount,
-        date: DateTime.now());
+      id: DateTime.now().toString(),
+      title: txTitle,
+      amount: txAmount,
+      date: chosenDate,
+    );
 
     setState(() {
       _userTransactions.add(newTx);
@@ -75,6 +96,12 @@ class _MyHomePageState extends State<MyHomePage> {
         );
       },
     );
+  }
+
+  void _deleteTransaction(String id) {
+    setState(() {
+      _userTransactions.removeWhere((element) => element.id == id);
+    });
   }
 
   @override
@@ -95,15 +122,8 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            const SizedBox(
-              width: double.infinity,
-              child: Card(
-                color: Colors.blue,
-                child: Text('CHART!'),
-                elevation: 5,
-              ),
-            ),
-            TransactionList(_userTransactions)
+            Chart(_recentTransactions),
+            TransactionList(_userTransactions, _deleteTransaction)
           ],
         ),
       ),
