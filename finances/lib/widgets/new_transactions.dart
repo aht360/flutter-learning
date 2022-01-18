@@ -13,7 +13,7 @@ class NewTransaction extends StatefulWidget {
 class _NewTransactionState extends State<NewTransaction> {
   final _titleController = TextEditingController();
   final _amountController = TextEditingController();
-  DateTime _selectedDate = DateTime.now();
+  DateTime? _selectedDate;
 
   void _submitData() {
     if (_amountController.text.isEmpty) {
@@ -63,17 +63,17 @@ class _NewTransactionState extends State<NewTransaction> {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: <Widget>[
               TextField(
-                decoration: InputDecoration(labelText: 'Title'),
+                decoration: const InputDecoration(labelText: 'Title'),
                 controller: _titleController,
                 onSubmitted: (_) => _submitData(),
               ),
               TextField(
-                decoration: InputDecoration(labelText: 'Amount'),
+                decoration: const InputDecoration(labelText: 'Amount'),
                 controller: _amountController,
                 keyboardType: TextInputType.number,
                 onSubmitted: (_) => _submitData(),
               ),
-              Container(
+              SizedBox(
                 height: 70,
                 child: Row(
                   children: <Widget>[
@@ -81,12 +81,12 @@ class _NewTransactionState extends State<NewTransaction> {
                       child: Text(
                         _selectedDate == null
                             ? 'No date chosen'
-                            : 'Picked Date: ${DateFormat.yMMMMd().format(_selectedDate)}',
+                            : 'Picked Date: ${DateFormat.yMMMMd().format(_selectedDate!)}',
                       ),
                     ),
                     TextButton(
                       onPressed: _presentDatePicker,
-                      child: Text(
+                      child: const Text(
                         'Choose Date',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
@@ -98,7 +98,7 @@ class _NewTransactionState extends State<NewTransaction> {
               ),
               ElevatedButton(
                 onPressed: _submitData,
-                child: Text('Add Transaction'),
+                child: const Text('Add Transaction'),
               )
             ],
           ),

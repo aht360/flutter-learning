@@ -14,15 +14,14 @@ class TransactionList extends StatelessWidget {
         ? LayoutBuilder(
             builder: (ctx, constraints) {
               return Column(
-                mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   Text('No transactions added yet!',
                       style: Theme.of(context).textTheme.headline6),
-                  const SizedBox(
-                    height: 30,
+                  SizedBox(
+                    height: constraints.maxHeight * 0.05,
                   ),
-                  Container(
+                  SizedBox(
                     height: constraints.maxHeight * 0.6,
                     child: Image.asset(
                       'assets/images/waiting.png',
@@ -33,13 +32,16 @@ class TransactionList extends StatelessWidget {
               );
             },
           )
-        : ListView.builder(
-            itemBuilder: (ctx, index) {
-              return TransactionItem(
-                  transaction: transactions[index],
-                  deleteTransaction: deleteTransaction);
-            },
-            itemCount: transactions.length,
+        : ListView(
+            children: transactions
+                .map(
+                  (tx) => TransactionItem(
+                    key: ValueKey(tx.id),
+                    transaction: tx,
+                    deleteTransaction: deleteTransaction,
+                  ),
+                )
+                .toList(),
           );
   }
 }

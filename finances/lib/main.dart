@@ -158,7 +158,14 @@ class _MyHomePageState extends State<MyHomePage> {
             0.3,
         child: Chart(_recentTransactions),
       ),
-      txListWidget
+      Row(
+        children: [
+          Expanded(
+            flex: 1,
+            child: txListWidget,
+          ),
+        ],
+      )
     ];
   }
 
