@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
-import 'package:vakinha_burguer_mobile/app/core/services/auth_service.dart';
+import 'package:vakinha_burguer_mobile/app/core/ui/widgets/icon_badge.dart';
 import 'package:vakinha_burguer_mobile/app/core/ui/widgets/vakinha_appbar.dart';
 import './home_controller.dart';
 
@@ -23,9 +23,10 @@ class HomePage extends GetView<HomeController> {
                 ),
                 label: 'Produtos',
               ),
-              const BottomNavigationBarItem(
-                icon: Icon(
-                  Icons.shopping_cart,
+              BottomNavigationBarItem(
+                icon: IconBadge(
+                  icon: Icons.shopping_cart,
+                  number: controller.totalProductsInShoppingCard,
                 ),
                 label: 'Carrinho',
               ),

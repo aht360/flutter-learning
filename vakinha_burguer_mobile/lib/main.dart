@@ -8,6 +8,7 @@ import 'package:vakinha_burguer_mobile/app/routes/register_routes.dart';
 import 'package:vakinha_burguer_mobile/app/routes/splash_routes.dart';
 
 import 'app/routes/home_routers.dart';
+import 'app/routes/product_routers.dart';
 
 Future<void> main() async {
   await GetStorage.init();
@@ -27,7 +28,8 @@ class VakinhaBurguerMainApp extends StatelessWidget {
         ...SplashRouters.routers,
         ...AuthRouters.routers,
         ...RegisterRouters.routers,
-        ...HomeRouters.routers
+        ...HomeRouters.routers,
+        ...ProductRouters.routers,
       ],
     );
   }

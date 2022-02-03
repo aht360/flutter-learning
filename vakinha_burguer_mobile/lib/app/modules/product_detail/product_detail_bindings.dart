@@ -1,11 +1,11 @@
 import 'package:get/get.dart';
-import './home_controller.dart';
+import './product_detail_controller.dart';
 
-class HomeBindings implements Bindings {
+class ProductDetailBindings implements Bindings {
   @override
   void dependencies() {
     Get.put(
-      HomeController(
+      ProductDetailController(
         shoppingCardService: Get.find(),
       ),
     );
