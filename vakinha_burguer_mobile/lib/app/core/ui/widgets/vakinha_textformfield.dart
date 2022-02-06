@@ -9,8 +9,8 @@ class VakinhaTextformfield extends StatelessWidget {
   final ValueChanged<String>? onChange;
 
   const VakinhaTextformfield({
-    Key? key,
     required this.label,
+    Key? key,
     this.controller,
     this.validator,
     this.onChange,

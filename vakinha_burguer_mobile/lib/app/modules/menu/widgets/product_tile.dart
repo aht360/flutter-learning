@@ -8,8 +8,8 @@ class ProductTile extends StatelessWidget {
   final ProductModel product;
 
   const ProductTile({
-    Key? key,
     required this.product,
+    Key? key,
   }) : super(key: key);
 
   @override

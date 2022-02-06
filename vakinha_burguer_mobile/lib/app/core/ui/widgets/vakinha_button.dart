@@ -8,12 +8,12 @@ class VakinhaButton extends StatelessWidget {
   final Color? color;
 
   const VakinhaButton({
-    Key? key,
     required this.label,
     required this.onPressed,
     this.width,
     this.height = 50,
     this.color,
+    Key? key,
   }) : super(key: key);
 
   @override

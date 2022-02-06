@@ -4,6 +4,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:vakinha_burguer_mobile/app/core/bindings/application_binding.dart';
 import 'package:vakinha_burguer_mobile/app/core/ui/vakinha_ui.dart';
 import 'package:vakinha_burguer_mobile/app/routes/auth_routes.dart';
+import 'package:vakinha_burguer_mobile/app/routes/orders_routes.dart';
 import 'package:vakinha_burguer_mobile/app/routes/register_routes.dart';
 import 'package:vakinha_burguer_mobile/app/routes/splash_routes.dart';
 
@@ -30,6 +31,7 @@ class VakinhaBurguerMainApp extends StatelessWidget {
         ...RegisterRouters.routers,
         ...HomeRouters.routers,
         ...ProductRouters.routers,
+        ...OrdersRoutes.routers
       ],
     );
   }

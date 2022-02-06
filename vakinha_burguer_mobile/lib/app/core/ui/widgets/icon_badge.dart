@@ -7,9 +7,9 @@ class IconBadge extends StatelessWidget {
   final IconData icon;
 
   const IconBadge({
-    Key? key,
     required this.number,
     required this.icon,
+    Key? key,
   }) : super(key: key);
 
   @override
