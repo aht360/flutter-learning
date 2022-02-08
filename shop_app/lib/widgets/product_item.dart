@@ -65,7 +65,7 @@ class ProductItem extends StatelessWidget {
                       cart.removeSingleItem(product.id);
                     },
                   ),
-                  duration: Duration(seconds: 2),
+                  duration: const Duration(seconds: 2),
                 ),
               );
             },
