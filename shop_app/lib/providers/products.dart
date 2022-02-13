@@ -9,6 +9,15 @@ import 'package:http/http.dart' as http;
 class Products with ChangeNotifier {
   List<Product> _items = [];
 
+  final String? authToken;
+  final String? userId;
+
+  Products(
+    this.authToken,
+    this._items,
+    this.userId,
+  );
+
   List<Product> get items {
     return [..._items];
   }
@@ -17,17 +26,42 @@ class Products with ChangeNotifier {
     return _items.where((item) => item.isFavorite).toList();
   }
 
-  Future<void> fetchAndSetProducts() async {
-    final url = Uri.https(
+  Future<void> fetchAndSetProducts([bool filterByUser = false]) async {
+    final filterString = filterByUser
+        ? {
+            'orderBy': '"creatorId"',
+            'equalTo': '"$userId"',
+          }
+        : {};
+    var url = Uri.https(
       'shop-app-backend-da3f6-default-rtdb.firebaseio.com',
       '/product.json',
+      {
+        ...filterString,
+        'auth': authToken,
+      },
     );
+
     try {
       final response = await http.get(url);
       final extractedData = json.decode(response.body) as Map<String, dynamic>?;
       if (extractedData == null) {
         return;
       }
+      url = Uri.https(
+        'shop-app-backend-da3f6-default-rtdb.firebaseio.com',
+        '/userFavorites/$userId.json',
+        {
+          'auth': authToken,
+        },
+      );
+
+      final favoriteResponse = await http.get(url);
+
+      final favoriteData = json.decode(
+        favoriteResponse.body,
+      );
+
       final List<Product> loadedProducts = [];
       extractedData.forEach((prodId, prodData) {
         loadedProducts.add(
@@ -37,7 +71,8 @@ class Products with ChangeNotifier {
             description: prodData['description'],
             price: prodData['price'],
             imageUrl: prodData['imageUrl'],
-            isFavorite: prodData['isFavorite'],
+            isFavorite:
+                favoriteData == null ? false : favoriteData[prodId] ?? false,
           ),
         );
       });
@@ -54,6 +89,9 @@ class Products with ChangeNotifier {
     final url = Uri.https(
       'shop-app-backend-da3f6-default-rtdb.firebaseio.com',
       '/product.json',
+      {
+        'auth': authToken,
+      },
     );
 
     try {
@@ -65,7 +103,7 @@ class Products with ChangeNotifier {
             'description': product.description,
             'imageUrl': product.imageUrl,
             'price': product.price,
-            'isFavorite': product.isFavorite,
+            'creatorId': userId,
           },
         ),
       );
@@ -95,7 +133,11 @@ class Products with ChangeNotifier {
       final url = Uri.https(
         'shop-app-backend-da3f6-default-rtdb.firebaseio.com',
         '/product/$id.json',
+        {
+          'auth': authToken,
+        },
       );
+
       try {
         final updatedProduct = json.encode({
           'title': newProduct.title,
@@ -127,6 +169,9 @@ class Products with ChangeNotifier {
     final url = Uri.https(
       'shop-app-backend-da3f6-default-rtdb.firebaseio.com',
       '/product/$id.json',
+      {
+        'auth': authToken,
+      },
     );
 
     final response = await http.delete(url);
