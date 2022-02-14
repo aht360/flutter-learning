@@ -70,8 +70,11 @@ class Auth with ChangeNotifier {
           ),
         ),
       );
+
       _autoLogout();
       notifyListeners();
+
+      SharedPreferences.setMockInitialValues({});
 
       final prefs = await SharedPreferences.getInstance();
 
@@ -81,7 +84,7 @@ class Auth with ChangeNotifier {
         'expiryTime': _expiryTime!.toIso8601String(),
       });
 
-      prefs.setString('userData', userData);
+      await prefs.setString('userData', userData);
     } catch (err) {
       throw err;
     }
@@ -89,16 +92,18 @@ class Auth with ChangeNotifier {
 
   Future<bool> tryAutoLogin() async {
     final prefs = await SharedPreferences.getInstance();
-    if (prefs.containsKey('userData')) {
+
+    if (!prefs.containsKey('userData')) {
       return false;
     }
 
-    final extractedUserData =
-        json.decode(prefs.getString('userData')!) as Map<String?, String?>;
+    final String? encodedUserData = prefs.getString('userData');
+
+    final extractedUserData = json.decode(encodedUserData!);
 
     final expiryTime = DateTime.parse(extractedUserData['expiryTime']!);
 
-    if (expiryTime.isAfter(DateTime.now())) {
+    if (expiryTime.isBefore(DateTime.now())) {
       return false;
     }
 
@@ -107,6 +112,7 @@ class Auth with ChangeNotifier {
     _expiryTime = expiryTime;
     notifyListeners();
     _autoLogout();
+
     return true;
   }
 
